@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./images.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-check-circle"></i><span>Todo</span>List</h1>
+        <input type="text" placeholder="Add your Task.." class="input-text" id="InputText" required>
+        <button title="add task" class="add-button" type="submit"><i class="fas fa-plus-square"></i></button>
+        <button class="save-button" type="submit"style="display: none;"><i class="fas fa-save" ></i></button>
+        <p id="error"></p>
+        <div class="tab" name="todos">
+            <input type="hidden" name="taskId" id="taskId" value=0>
+            <button class="tabs active" id="tab1" onclick="tabs(1);" value="taball">All</button>
+            <button class="tabs" id="tab2" onclick="tabs(2);" value="tabcompleted">Completed</button>
+            <button class="tabs" id="tab3" onclick="tabs(3);" value="tabuncompleted">Incompleted</button>
+        </div>
+        <div class="todo-container"> 
+            <button type="button" title="Delete selected Task" class="del1-btn" onclick="deletemultiple()">Delete</button>
+            <button type="button" title="Delete all Task" class="del-btn" onclick="deleteall()">DeleteAll</button>
+            <ul class="todo-list" id="todoLists">
+            </ul>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
