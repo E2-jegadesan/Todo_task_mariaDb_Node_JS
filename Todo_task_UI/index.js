@@ -359,7 +359,7 @@ function deletemultiple() {
     check.forEach((checkbox) => {
         checkdata.push(checkbox.value)
     })
-    if (checkdata > 0) {
+    if (checkdata.length > 0) {
         if (confirm("sure you want delete selected task..?") === true) {
             fetch('http://localhost:3001/deleteTaskbyId', {
                 method: 'POST',
