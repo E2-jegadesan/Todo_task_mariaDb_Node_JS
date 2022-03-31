@@ -1,4 +1,4 @@
-function Successmsg(data,message){
+function successMsg(data,message){
     var response = {
         data:data,
         message:message,
@@ -7,7 +7,7 @@ function Successmsg(data,message){
     return response
 }
 
-function Failuremsg(message){
+function failureMsg(message){
     var response ={
         message:message,
         status:"Failure"
@@ -16,8 +16,8 @@ function Failuremsg(message){
 }
 
 module.exports = {
-    Successmsg:Successmsg,
-    Failuremsg:Failuremsg
+    successMsg:successMsg,
+    failureMsg:failureMsg
 
 }
 

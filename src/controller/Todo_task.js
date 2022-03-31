@@ -1,5 +1,5 @@
-const TodoDao= require('../dao/Todo_task')
-const ResponseMsg = require('../config/config')
+const todoDao= require('../dao/Todo_task')
+const responseMsg = require('../config/config')
 
 module.exports = {
     createTask: createTask,
@@ -12,52 +12,52 @@ module.exports = {
 
 
 function createTask(req, res) {
-    return TodoDao.createTask(req.body).then(function () {
-        res.status(201).send(ResponseMsg.Successmsg(null,"Added Successfully"))
+    return todoDao.createTask(req.body).then(function () {
+        res.status(201).send(responseMsg.successMsg(null,"Added Successfully"))
     }).catch(e => {
-        res.status(400).send(ResponseMsg.Failuremsg(e.message))
+        res.status(400).send(responseMsg.failureMsg(e.message))
     })
 }
 
 function fetchTask(req,res) {
-    return TodoDao.fetchTask(req).then(function (response) {
-        res.status(200).send(ResponseMsg.Successmsg(response,"fetched Successfully"))
+    return todoDao.fetchTask(req).then(function (response) {
+        res.status(200).send(responseMsg.successMsg(response,"fetched Successfully"))
     }).catch(e => {
-        res.status(400).send(ResponseMsg.Failuremsg(e.message))
+        res.status(400).send(responseMsg.failureMsg(e.message))
     })
 }
 
 function deleteTask(req, res) {
-    return TodoDao.deleteTask(req.body).then(function () {
-        res.status(200).send(ResponseMsg.Successmsg(null,"Deleted Successfully"))
+    return todoDao.deleteTask(req.body).then(function () {
+        res.status(200).send(responseMsg.successMsg(null,"Deleted Successfully"))
     }).catch(e => {
-        res.status(400).send(ResponseMsg.Failuremsg(e.message))
+        res.status(400).send(responseMsg.failureMsg(e.message))
     })
 }
 
 function updateTask(req, res) {
-    return TodoDao.updateTask(req.body).then(function () {
-        res.status(200).send(ResponseMsg.Successmsg(null,"Updated Successfully"))
+    return todoDao.updateTask(req.body).then(function () {
+        res.status(200).send(responseMsg.successMsg(null,"Updated Successfully"))
     }).catch(e => {
-        res.status(400).send(ResponseMsg.Failuremsg(e.message))
+        res.status(400).send(responseMsg.failureMsg(e.message))
     })
 }
 
 
 function deleteall(req,res){
-    return TodoDao.deleteAll().then(()=>{
-        res.status(200).send(ResponseMsg.Successmsg(null,"All task deleted successfully"))
+    return todoDao.deleteAll().then(()=>{
+        res.status(200).send(responseMsg.successMsg(null,"All task deleted successfully"))
     })
     .catch(e=>{
-        res.send(400).send(ResponseMsg.Failuremsg(e.message))
+        res.send(400).send(responseMsg.failureMsg(e.message))
     })
 }
 
 
 function deleteTaskById(req,res){
-    return TodoDao.deleteById(req.body).then(()=>{
-        res.status(200).send(ResponseMsg.Successmsg(null,"Selected task deleted successfully"))
+    return todoDao.deleteById(req.body).then(()=>{
+        res.status(200).send(responseMsg.successMsg(null,"Selected task deleted successfully"))
     }).catch(e=>{
-        res.status(400).send(ResponseMsg.Failuremsg(e.message))
+        res.status(400).send(responseMsg.failureMsg(e.message))
     })
 }
