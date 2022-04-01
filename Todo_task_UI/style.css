@@ -196,6 +196,7 @@ span{
     color: crimson;
     font-weight: bolder;
     border-right: 2px solid black;
+    cursor: pointer;
 }
 .del1-btn{
     padding: 5px;
@@ -204,6 +205,7 @@ span{
     background-color:#c5c6c7;
     color: crimson;
     font-weight: bolder;
+    cursor: pointer;
     /* margin-right: 4%; */
 }
 
