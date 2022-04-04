@@ -6,17 +6,21 @@ module.exports = {
     fetchTask: fetchTask,
     deleteTask: deleteTask,
     updateTask: updateTask,
-    deleteall:deleteall,
-    deleteTaskById:deleteTaskById
+    deleteAllTask:deleteAllTask,
+    deleteSelectedTask:deleteSelectedTask
 }
 
 
 function createTask(req, res) {
-    return todoDao.createTask(req.body).then(function () {
-        res.status(201).send(responseMsg.successMsg(null,"Added Successfully"))
-    }).catch(e => {
-        res.status(400).send(responseMsg.failureMsg(e.message))
-    })
+    if(req.body.task_name != 0){
+        return todoDao.createTask(req.body).then(function () {
+            res.status(201).send(responseMsg.successMsg(null,"Added Successfully"))
+        }).catch(e => {
+            res.status(500).send(responseMsg.failureMsg(e.message))
+        }) 
+    }else{
+         res.status(400).send(responseMsg.failureMsg("Enter the task"))
+    }  
 }
 
 function fetchTask(req,res) {
@@ -28,10 +32,15 @@ function fetchTask(req,res) {
 }
 
 function deleteTask(req, res) {
-    return todoDao.deleteTask(req.body).then(function () {
-        res.status(200).send(responseMsg.successMsg(null,"Deleted Successfully"))
+    return todoDao.deleteTask(req.body).then(function (userResponse) {
+        if(userResponse == 1){
+            res.status(200).send(responseMsg.successMsg(null,"Deleted Successfully"))
+        }else{
+            res.status(400).send(responseMsg.failureMsg("No Task Found"))
+        }
+        
     }).catch(e => {
-        res.status(400).send(responseMsg.failureMsg(e.message))
+        res.status(500).send(responseMsg.failureMsg(e.message))
     })
 }
 
@@ -44,8 +53,8 @@ function updateTask(req, res) {
 }
 
 
-function deleteall(req,res){
-    return todoDao.deleteAll().then(()=>{
+function deleteAllTask(req,res){
+    return todoDao.deleteAllTask().then(()=>{
         res.status(200).send(responseMsg.successMsg(null,"All task deleted successfully"))
     })
     .catch(e=>{
@@ -54,8 +63,8 @@ function deleteall(req,res){
 }
 
 
-function deleteTaskById(req,res){
-    return todoDao.deleteById(req.body).then(()=>{
+function deleteSelectedTask(req,res){
+    return todoDao.deleteSeletedTask(req.body).then(()=>{
         res.status(200).send(responseMsg.successMsg(null,"Selected task deleted successfully"))
     }).catch(e=>{
         res.status(400).send(responseMsg.failureMsg(e.message))

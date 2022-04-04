@@ -5,9 +5,9 @@ module.exports = {
     fetchTask: fetchTask,
     deleteTask: deleteTask,
     updateTask: updateTask,
-    deleteAll:deleteAll,
-    deleteById:deleteById
-    
+    deleteAllTask: deleteAllTask,
+    deleteSeletedTask: deleteSeletedTask
+
 }
 
 function createTask(data) {
@@ -33,7 +33,7 @@ function fetchTask() {
 }
 
 
-function deleteTask(data){
+function deleteTask(data) {
     const where = {
         task_id: data.task_id
     }
@@ -48,27 +48,26 @@ function deleteTask(data){
 }
 
 
-function deleteAll(){
-    return new Promise((resolve,reject)=>{
-        connection.Todo.destroy({where :{}}).then((rowDeleted)=>{
+function deleteAllTask() {
+    return new Promise((resolve, reject) => {
+        connection.Todo.destroy({ where: {} }).then((rowDeleted) => {
             resolve(rowDeleted)
-        })
-        .catch(err=>{
-            reject(err)
-            return;
-        })
+        }).catch(err => {
+                reject(err)
+                return;
+            })
 
     })
 }
 
-function deleteById(data){
-    return new Promise((resolve,reject)=>{
-        const where={
-            task_id:data.task_id
+function deleteSeletedTask(data) {
+    return new Promise((resolve, reject) => {
+        const where = {
+            task_id: data.task_id
         }
-        connection.Todo.destroy({where:where}).then((rowDeleted)=>{
+        connection.Todo.destroy({ where: where }).then((rowDeleted) => {
             resolve(rowDeleted)
-        }).catch(err=>{
+        }).catch(err => {
             reject(err);
             return;
         })
@@ -83,10 +82,9 @@ function updateTask(data) {
     return new Promise((resolve, reject) => {
         connection.Todo.update(data, { where: where }).then((rowsUpdated) => {
             resolve(rowsUpdated);
-        }).
-            catch(err => {
-                reject(err);
-                return;
-            });
+        }).catch(err => {
+            reject(err);
+            return;
+        });
     });
 }

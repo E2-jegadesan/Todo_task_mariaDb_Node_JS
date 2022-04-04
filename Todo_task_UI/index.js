@@ -7,21 +7,21 @@ let addtasklist = document.getElementById('todoLists');
 let filterOption = document.querySelector('.tab');
 
 // EventListener
-filterOption.addEventListener("click", filterTodo);
+filterOption.addEventListener("click", filterTodotask);
 
-let newdata = [];
+let Taskarray = [];
 
 // Get list UI
-function getcall(newdata) {
+function getTask(Taskarray) {
     let html = '';
-    if (newdata.length > 0) {
-        newdata.forEach((item) => {
+    if (Taskarray.length > 0) {
+        Taskarray.forEach((item) => {
             html += `<div class="todo ${item.task_status ? 'completed' : ''}">
                     <input type="checkbox" id="mycheck" value="${item.task_id}">
-                    <li class="todo-item">${item.task}</li>
+                    <li class="todo-item">${item.task_name}</li>
                     <button type="button" title="task status"  class="complete-btn" onclick="Taskstatus('${item.task_id}','${item.task_status}')"><i class="fas fa-check"></i></button>
-                    <button type="button" title = "Edit task" class="edit-btn" onclick="updatedata('${item.task_id}','${item.task}')"><i class="fas fa-edit" ></i></button>
-                    <button type="button" title = "delete task" class="trash-btn" onclick="removedata('${item.task_id}')"><i class="fas fa-trash"></i></button>     
+                    <button type="button" title = "Edit task" class="edit-btn" onclick="updateTask('${item.task_id}','${item.task_name}')"><i class="fas fa-edit" ></i></button>
+                    <button type="button" title = "delete task" class="trash-btn" onclick="removeTask('${item.task_id}')"><i class="fas fa-trash"></i></button>     
                     </div>`
         });
     } else {
@@ -48,40 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 2000);
             return;
         } else {
-            fetch('http://localhost:3001/createTask', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    task: textInput.value
-                }),
-            }).then((response) =>
-                response.json().then(data => ({
-                    data: data,
-                    status: response.status//check it now
-                }))).then((res) => {
-                    if (res.status == 201) {
-                        iziToast.success({
-                            title: 'Success',
-                            message: res.data.message,
-                            position: 'topRight'
-                        });
-                    }else{
-                        iziToast.error({
-                            title: 'Error',
-                            message: 'Something went wrong',
-                            position: 'topRight'
-                        });
-                    }
-                }).catch(() => {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Something went wrong',
-                        position: 'topRight'
-                    });
-                });
-            gettodos();
+            createTask()
+            getAlltask();
             document.querySelectorAll('.tabs').forEach((tab) => {
                 tab.classList.remove("active");
             })
@@ -89,12 +57,48 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         textInput.value = '';
     });
-    gettodos();
+    getAlltask();
 });
 
 
+const createTask = async function(){
+    await fetch('http://localhost:3001/createTask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            task_name: textInput.value
+        }),
+    }).then((response) =>
+        response.json().then(data => ({
+            data: data,
+            status: response.status//check it now
+        }))).then((res) => {
+            if (res.status == 201) {
+                iziToast.success({
+                    title: 'Success',
+                    message: res.data.message,
+                    position: 'topRight'
+                });
+            }else{
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Something went wrong',
+                    position: 'topRight'
+                });
+            }
+        }).catch(() => {
+            iziToast.error({
+                title: 'Error',
+                message: 'Something went wrong',
+                position: 'topRight'
+            });
+        });
+}
+
 // Get all Task Here 
-const gettodos = async function () {
+const getAlltask = async function () {
     await fetch('http://localhost:3001/fetchTask', {
         method: 'GET',
         headers: {
@@ -105,9 +109,8 @@ const gettodos = async function () {
             data: data,
             status: response.status
         }))).then((res) => {
-            newdata = res.data.data;
             if (res.status == 200) {
-                return;
+                Taskarray = res.data.data;
             }else {
                 iziToast.error({
                     title: 'Error',
@@ -122,7 +125,7 @@ const gettodos = async function () {
                 position: 'topRight'
             });
         })
-    getcall(newdata);
+    getTask(Taskarray);
 }
 
 // Task Complete or Incomplete Button Function
@@ -158,7 +161,7 @@ function Taskstatus(value, done) {
                         position: 'topRight'
                     });
                 }
-                gettodos();
+                getAlltask();
             }).catch(() => {
                 iziToast.error({
                     title: 'Error',
@@ -196,7 +199,7 @@ function Taskstatus(value, done) {
                         position: 'topRight'
                     });
                 }
-                gettodos();
+                getAlltask();
             }).catch(() => {
                 iziToast.error({
                     title: 'Error',
@@ -209,14 +212,14 @@ function Taskstatus(value, done) {
 
 
 // Edit Task Function
-function updatedata(value, data) {
+function updateTask(value, data) {
     textInput.value = data;
     EditedIndex = value
     addbtn.style.display = "none";
     savebtn.style.display = "inline";
 }
 savebtn.addEventListener('click', function () {
-    var Data = newdata;
+    var Data = Taskarray;
     var InputValue = EditedIndex;
     for (var i = 0; i < Data.length; i++) {
         if (InputValue == Data[i].task_id) {
@@ -227,7 +230,7 @@ savebtn.addEventListener('click', function () {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    task: EditedInput,
+                    task_name: EditedInput,
                     task_id: InputValue
                 }),
             }).then((response) =>
@@ -248,7 +251,7 @@ savebtn.addEventListener('click', function () {
                             position: 'topRight'
                         });
                     }
-                    gettodos();
+                    getAlltask();
                 }).catch(() => {
                     iziToast.error({
                         title: 'Error',
@@ -264,7 +267,7 @@ savebtn.addEventListener('click', function () {
 })
 
 // Remove Function
-function removedata(value) {
+function removeTask(value) {
     fetch('http://localhost:3001/deleteTask', {
         method: 'POST',
         headers: {
@@ -291,7 +294,7 @@ function removedata(value) {
                     position: 'topRight',
                 });
             }
-            gettodos();
+            getAlltask();
         }).catch(() => {
             iziToast.error({
                 title: 'Error',
@@ -306,11 +309,11 @@ function removedata(value) {
 }
 
 // Delete all task function
-function deleteall() {
-    if (newdata.length > 0) {
+function deleteAlltask() {
+    if (Taskarray.length > 0) {
         if (confirm("Sure you want to delete all task..?") === true) {
 
-            fetch('http://localhost:3001/deleteAlltask', {
+            fetch('http://localhost:3001/deleteAllTask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -334,7 +337,7 @@ function deleteall() {
                             position: 'topRight',
                         });
                     }
-                    gettodos();
+                    getAlltask();
                 }).catch(() => {
                     iziToast.error({
                         title: 'Error',
@@ -353,7 +356,7 @@ function deleteall() {
     }
 }
 // Delete Selected Task Function
-function deletemultiple() {
+function deleteSelectedTask() {
     let check = document.querySelectorAll('input[type ="checkbox"]:checked');
     let checkdata = []
     check.forEach((checkbox) => {
@@ -361,7 +364,7 @@ function deletemultiple() {
     })
     if (checkdata.length > 0) {
         if (confirm("sure you want delete selected task..?") === true) {
-            fetch('http://localhost:3001/deleteTaskbyId', {
+            fetch('http://localhost:3001/deleteSelectedTask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -388,7 +391,7 @@ function deletemultiple() {
                             position: 'topRight',
                         });
                     }
-                    gettodos();
+                    getAlltask();
                 }).catch(() => {
                     iziToast.error({
                         title: 'Error',
@@ -403,12 +406,6 @@ function deletemultiple() {
         return
     }
 }
-
-
-
-
-
-
 // Filter Tab Function
 function tabs(tabIndex) {
     document.getElementById('tab1').style.display = "inline";
@@ -429,22 +426,17 @@ function tabs(tabIndex) {
     document.getElementById('tab' + tabIndex).classList.add("active");
 }
 // Filter Tasks  Function
-function filterTodo(e) {
+function filterTodotask(e) {
     let filterItems = [];
     switch (e.target.value) {
         case "tabcompleted":
-            filterItems = newdata.filter((item) => item.task_status);
+            filterItems = Taskarray.filter((item) => item.task_status);
             break;
         case "tabuncompleted":
-            filterItems = newdata.filter((item) => item.task_status === false);
+            filterItems = Taskarray.filter((item) => item.task_status === false);
             break;
         case "taball":
-            filterItems = newdata
+            filterItems = Taskarray
     }
-    getcall(filterItems)
+    getTask(filterItems)
 }
-
-
-
-
-

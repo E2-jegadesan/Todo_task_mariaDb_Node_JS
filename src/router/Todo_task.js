@@ -7,8 +7,8 @@ router.post('/createTask', todoController.createTask);
 router.get('/fetchTask',todoController.fetchTask);
 router.post('/deleteTask',todoController.deleteTask);
 router.put('/taskUpdated',todoController.updateTask);
-router.post('/deleteAlltask',todoController.deleteall);
-router.post('/deleteTaskbyId',todoController.deleteTaskById)
+router.post('/deleteAllTask',todoController.deleteAllTask);
+router.post('/deleteSelectedTask',todoController.deleteSelectedTask)
 
 
 module.exports = router
